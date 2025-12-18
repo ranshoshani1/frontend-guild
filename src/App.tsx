@@ -19,6 +19,13 @@ function App() {
         >
           Use Effect
         </Button>
+        <Button
+          onClick={() => {
+            navigate("/css");
+          }}
+        >
+          CSS
+        </Button>
       </Stack>
     </Stack>
   );
