@@ -6,6 +6,7 @@ import rawLoader from "vite-raw-plugin";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: "/frontend-guild/",
   plugins: [
     react(),
     tailwindcss(),
