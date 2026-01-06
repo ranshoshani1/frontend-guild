@@ -1,10 +1,7 @@
 import "@fontsource/oswald";
 import { Sheet } from "@mui/joy";
 import { createRoot } from "react-dom/client";
-import {
-  createBrowserRouter,
-  RouterProvider, Outlet
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import App from "./App.tsx";
 import "./index.css";
 import LectureUseEffect from "./lectures/use-effect/index.tsx";
@@ -19,26 +16,32 @@ export default function Layout() {
   );
 }
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: <Layout />,
+      children: [
+        {
+          index: true,
+          element: <App />,
+        },
+        {
+          path: "use-effect",
+          element: <LectureUseEffect />,
+        },
+        {
+          path: "css/*",
+          element: <Css />,
+        },
+      ],
+    },
+  ],
   {
-    path: "/",
-    element: <Layout />,
-    children: [
-      {
-        index: true,
-        element: <App />,
-      },
-      {
-        path: "use-effect",
-        element: <LectureUseEffect />,
-      },
-      {
-        path: "css/*",
-        element: <Css />,
-      }, 
-    ],
-  },
-]);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    basename: (import.meta as any).env.BASE_URL || "/",
+  }
+);
 
 createRoot(document.getElementById("root")!).render(
   <ThemeProvider colorScheme="dark">

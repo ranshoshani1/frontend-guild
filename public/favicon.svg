@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="64" height="64" viewBox="0 0 64 64"
+     fill="white" stroke="black" stroke-width="1.5"
+     stroke-linecap="round" stroke-linejoin="round">
+  <!-- Shield -->
+  <path d="M32 6
+           C24 12, 16 12, 12 14
+           V30
+           C12 43, 21 53, 32 58
+           C43 53, 52 43, 52 30
+           V14
+           C48 12, 40 12, 32 6Z"/>
+
+  <!-- Code mark: </> -->
+  <path d="M28 27 L21 32 L28 37"/>
+  <path d="M36 27 L43 32 L36 37"/>
+  <path d="M34 25 L30 39"/>
+</svg>
