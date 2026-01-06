@@ -9,8 +9,9 @@ import App from "./App.tsx";
 import "./index.css";
 import LectureUseEffect from "./lectures/use-effect/index.tsx";
 import ThemeProvider from "./providers/theme-provider.tsx";
+import Css from "./lectures/css/css.tsx";
 
-function Layout() {
+export default function Layout() {
   return (
     <>
       <Outlet />
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
         path: "use-effect",
         element: <LectureUseEffect />,
       },
+      {
+        path: "css/*",
+        element: <Css />,
+      }, 
     ],
   },
 ]);
