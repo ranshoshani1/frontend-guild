@@ -1,0 +1,194 @@
+# Creating a New Presentation
+
+## Overview
+
+This project supports two types of presentations:
+
+1. **Slide-based** (like `use-effect`) - Sequential slides with arrow key navigation
+2. **Route-based** (like `css`) - Each section is a separate route with a lobby page
+
+## Directory Structure
+
+```
+src/lectures/<lecture-name>/
+├── index.tsx           # Main entry point
+├── examples/           # Code examples (optional)
+├── components/         # Reusable components (optional)
+└── style.css           # Custom styles (optional)
+```
+
+## Pattern 1: Slide-Based Presentation
+
+Best for: Linear presentations with sequential content
+
+### Entry Point (`index.tsx`)
+
+```tsx
+import { Typography, Stack, Divider } from "@mui/joy";
+import Slide from "../../common/slide";
+import { Presentation } from "../../presentation-framework";
+import Code from "../../presentation-framework/code";
+import { CodeWithRender } from "../../common/code-with-render";
+
+const slides = [
+  () => (
+    <Slide alignItems="center" justifyContent="center" textAlign="center">
+      <Typography level="h1" sx={{ fontSize: "7rem" }}>
+        Title Slide
+      </Typography>
+    </Slide>
+  ),
+  () => (
+    <Slide gap={4}>
+      <Typography level="h1">Content Slide</Typography>
+      {/* slide content */}
+    </Slide>
+  ),
+];
+
+export default function LectureName() {
+  return <Presentation slides={slides} />;
+}
+```
+
+### Key Components
+
+- `<Slide>` - Wrapper component (accepts all MUI Joy Stack props)
+- `<Presentation slides={slides}>` - Handles navigation with arrow keys
+- `<Code>{codeString}</Code>` - Syntax highlighted code block
+- `<CodeWithRender code={raw} component={<Component />}>` - Toggle code view with live render
+
+### Importing Raw Code
+
+```tsx
+import ExampleComponent from "./examples/example.tsx";
+import exampleCode from "./examples/example.tsx?raw";
+
+// Use in slide
+<CodeWithRender code={exampleCode} component={<ExampleComponent />} />;
+```
+
+## Pattern 2: Route-Based Presentation
+
+Best for: Topic collections with individual sections
+
+### Entry Point (`<name>.tsx`)
+
+```tsx
+import { NavLink, useRoutes } from "react-router-dom";
+import Lobby from "./lobby";
+import SectionOne from "./section-one";
+
+export default function LectureName() {
+  const sections = [
+    {
+      path: "section-one",
+      title: "Section One",
+      element: <SectionOne />,
+    },
+  ];
+
+  sections.unshift({
+    index: true,
+    title: "Lecture Name",
+    element: <Lobby sections={sections} />,
+  });
+
+  const router = useRoutes(sections);
+
+  return (
+    <div className="flex flex-col gap-5 p-8 h-full">
+      <div className="flex flex-row gap-2 items-end">
+        <NavLink to="/lecture-name" className="text-5xl font-bold leading-none">
+          Lecture Name
+        </NavLink>
+        <p className="text-xl">Subtitle</p>
+      </div>
+      <hr />
+      <div className="transition-all duration-300">{router}</div>
+    </div>
+  );
+}
+```
+
+### Lobby Component
+
+```tsx
+import { NavLink } from "react-router-dom";
+
+export default function Lobby({ sections }) {
+  return (
+    <div className="flex items-center justify-center">
+      <ul className="flex gap-2 flex-wrap">
+        {sections
+          .filter((s) => !s.index && s.path)
+          .map((section) => (
+            <li key={section.path}>
+              <NavLink
+                className="bg-blue-500 p-2 rounded-md"
+                to={`/lecture-name/${section.path}`}
+              >
+                {section.title}
+              </NavLink>
+            </li>
+          ))}
+      </ul>
+    </div>
+  );
+}
+```
+
+## Registering the Presentation
+
+### 1. Add route in `src/main.tsx`
+
+```tsx
+import LectureName from "./lectures/<lecture-name>/index.tsx";
+
+// In router children array:
+{
+  path: "lecture-name", // or "lecture-name/*" for route-based
+  element: <LectureName />,
+},
+```
+
+### 2. Add button in `src/App.tsx`
+
+```tsx
+<Button onClick={() => navigate("/lecture-name")}>Lecture Name</Button>
+```
+
+## Available UI Components
+
+### From MUI Joy
+
+- `Typography` - Text with levels (h1, h2, h3, body-lg, body-md, body-sm)
+- `Stack` - Flexbox container
+- `Divider` - Horizontal/vertical divider
+- `Card` - Content card
+- `List`, `ListItem` - List components
+- `Button`, `IconButton` - Buttons
+
+### From Presentation Framework
+
+- `Code` - Syntax highlighted code (pass string as children)
+- `Presentation` - Slide deck wrapper with navigation
+
+### From Common
+
+- `Slide` - Full-height slide wrapper (extends MUI Stack)
+- `CodeWithRender` - Code toggle with live component preview
+
+## Styling
+
+- Use Tailwind CSS classes for layout
+- Use MUI Joy `sx` prop for component-specific styles
+- Dark theme is applied by default via `ThemeProvider`
+
+## Tips
+
+- Slides are React functional components (FC[])
+- Navigation: Arrow keys (left/right) or bottom buttons
+- URL tracks slide index via `?s=` query param
+- Use `level` prop on Typography for semantic headings
+- Import code files with `?raw` suffix for display

@@ -1,6 +1,17 @@
 import { Button } from "@mui/joy";
-import { VscChevronLeft, VscChevronRight } from "react-icons/vsc";
+import { VscChevronLeft, VscChevronRight, VscHome } from "react-icons/vsc";
+import { useNavigate } from "react-router-dom";
 import { usePresentationContext } from "./presentation";
+
+export const HomeButton = () => {
+  const navigate = useNavigate();
+
+  return (
+    <Button onClick={() => navigate("/")} size="sm" variant="soft">
+      <VscHome />
+    </Button>
+  );
+};
 
 export const NextButton = () => {
   const { next } = usePresentationContext();

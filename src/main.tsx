@@ -7,6 +7,7 @@ import "./index.css";
 import LectureUseEffect from "./lectures/use-effect/index.tsx";
 import ThemeProvider from "./providers/theme-provider.tsx";
 import Css from "./lectures/css/css.tsx";
+import TanstackQuery from "./lectures/tanstack-query/index.tsx";
 
 export default function Layout() {
   return (
@@ -33,6 +34,10 @@ const router = createBrowserRouter(
         {
           path: "css/*",
           element: <Css />,
+        },
+        {
+          path: "tanstack-query",
+          element: <TanstackQuery />,
         },
       ],
     },
