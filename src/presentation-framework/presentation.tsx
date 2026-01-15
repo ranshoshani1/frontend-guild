@@ -1,7 +1,8 @@
-import { Stack } from "@mui/joy";
+import { Box, Stack } from "@mui/joy";
 import { createContext, FC, useCallback, useContext, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { NextButton, PreviousButton } from "./buttons";
+import { HomeButton, NextButton, PreviousButton } from "./buttons";
+import { SxProps } from "@mui/joy/styles/types";
 
 const PresentationContext = createContext({
   next: () => {},
@@ -14,9 +15,15 @@ export const usePresentationContext = () => {
 
 type Props = {
   slides: FC[];
+  showProgress?: boolean;
+  progressBarCustomStyle?: SxProps;
 };
 
-export default function Presentation({ slides }: Props) {
+export default function Presentation({
+  slides,
+  showProgress = true,
+  progressBarCustomStyle = {},
+}: Props) {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentSlide = Number(searchParams.get("s")) || 0;
 
@@ -79,12 +86,40 @@ export default function Presentation({ slides }: Props) {
             position: "fixed",
             bottom: 0,
             right: 0,
-            padding: 1,
+            padding: 2,
+            opacity: 0,
+            transition: "opacity 0.2s ease-in-out",
+            "&:hover": {
+              opacity: 1,
+            },
           }}
         >
+          <HomeButton />
           <PreviousButton />
           <NextButton />
         </Stack>
+        {showProgress && (
+          <Box
+            sx={{
+              position: "fixed",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: 4,
+              backgroundColor: "neutral.800",
+            }}
+          >
+            <Box
+              sx={{
+                height: "100%",
+                width: `${((currentSlide + 1) / slides.length) * 100}%`,
+                backgroundColor: "primary.500",
+                transition: "width 0.3s ease-in-out",
+                ...progressBarCustomStyle,
+              }}
+            />
+          </Box>
+        )}
       </Stack>
     </PresentationContext.Provider>
   );

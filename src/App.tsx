@@ -26,6 +26,16 @@ function App() {
         >
           CSS
         </Button>
+        <Button
+          onClick={() => {
+            navigate("/tanstack-query");
+          }}
+          sx={{
+            background: "linear-gradient(135deg, #e040fb 0%, #f48fb1 100%)",
+          }}
+        >
+          TanStack Query
+        </Button>
       </Stack>
     </Stack>
   );
